@@ -1,0 +1,27 @@
+<!-- this code pulls most of the html formatting from the ims_base.html file as a template -->
+{% extends "ims/ims_base.html" %}
+{% block content %}
+    <!--  Page Content Area  -->
+    <legend class="border-bottom"><h1>Main Content</h1></legend>
+    <h3 class="mr-auto">This area will be used to display readonly item information.</h3>
+    <form class="form-group">
+        <div class="mb-3">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="nomen_span">Nomenclature</span>
+                <input type="text" readonly class="form-control" id="nomenclature" aria-label="Nomenclature" aria-describedby="nomen_span">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="part_number_span">Part #</span>
+                <input type="text" readonly class="form-control" id="part_number" aria-label="part_number" aria-describedby="nomen_span">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="serial_number_span">Serial #</span>
+                <input type="text" readonly class="form-control" id="serial_number" aria-label="serial_number" aria-describedby="serial_number_span">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="end_item_account_number_span">Eq Account #</span>
+                <input type="text" readonly class="form-control" id="end_item_account_number_id" aria-label="end_item_account_number" aria-describedby="end_item_account_number_span">
+            </div>
+        </div>
+    </form>
+{% endblock %}

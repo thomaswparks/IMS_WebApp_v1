@@ -1,0 +1,27 @@
+{% extends "ims/ims_base.html" %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <!-- Main Page Content -->
+    <div class="content-section">
+        <form method="post">{% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4"><h1>Update End Item</h1></legend>
+                    {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info mt-2 p-50" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
+
+{% block rightColumn %}
+
+    <!--  Right-Side column, will contain listing of assigned equipment  -->
+    <legend class="border-bottom mb-4"><h1>End Items</h1></legend>
+    <div class="position-sticky pt-3">
+        <p>This section will contain a scrolling list of End items. When the user clicks on an item, they will be displayed in the main content section</p>
+    </div>
+{% endblock %}
