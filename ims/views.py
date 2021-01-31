@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.db import models
+from django.db import models, reset_queries
 from .forms import new_item_form, item_update_form
 from .models import EqAccount, EndItem
 
@@ -52,12 +52,13 @@ def updateItem(request, pk):
     end_items = get_end_items(eq_acct)
     context = {}
     item = EndItem.objects.get(end_item_id=pk)
-
-
-    u_form = item_update_form()
-    if request.POST:
-        u_form = item_update_form(request.POST)
+    u_form = item_update_form(instance=item)
+    
+    if request.method == 'POST':
+        u_form = item_update_form(request.POST, instance=item)
         
+        if u_form.is_valid:
+            u_form.save()
     context = {
             'item': item,
             'u_form': u_form,
@@ -68,8 +69,29 @@ def updateItem(request, pk):
             'end_items': end_items
         }
     return render(request, 'ims/item_update.html', context)
-        
 
+
+@login_required
+def delete_item(request, pk):
+    title = "Update Item"
+    current_user = request.user
+    user_id = get_user_id(request)
+    eq_acct = get_eq_acct(user_id)
+    end_items = get_end_items(eq_acct)
+    context = {}
+    item = EndItem.objects.get(end_item_id=pk)
+    if request.method == 'POST':
+        item.delete()
+        return redirect('/')
+    context = {
+            'item': item,
+            'title': title,
+            'current_user': current_user,
+            'user_id': user_id,
+            'eq_acct': eq_acct,
+            'end_items': end_items
+        }
+    return render(request, 'ims/delete.html', context)
 
 # this view grabs all End_Item objects from all of the current user's equipment accounts and passes it to home.html
 @login_required(login_url='login')
@@ -79,9 +101,13 @@ def home(request):
     eq_acct = get_eq_acct(user_id)
     end_items = get_end_items(eq_acct)
     title = "Home"
+    total_items = 0
 
-    print(eq_acct)
-    context = {'current_user': current_user, 'user_id': user_id, 'eq_acct': eq_acct, 'end_items': end_items}
+    for item in end_items:
+        total_items += 1
+
+    print('ims.views.home: ', eq_acct)
+    context = {'total_items': total_items, 'title': title,'current_user': current_user, 'user_id': user_id, 'eq_acct': eq_acct, 'end_items': end_items}
     return render(request, 'ims/home.html', context)
 
 def get_user_id(request):

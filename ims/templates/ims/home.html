@@ -2,26 +2,40 @@
 {% extends "ims/ims_base.html" %}
 {% block content %}
     <!--  Page Content Area  -->
-    <legend class="border-bottom"><h1>Main Content</h1></legend>
-    <h3 class="mr-auto">This area will be used to display readonly item information.</h3>
-    <form class="form-group">
-        <div class="mb-3">
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="nomen_span">Nomenclature</span>
-                <input type="text" readonly class="form-control" id="nomenclature" aria-label="Nomenclature" aria-describedby="nomen_span">
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="part_number_span">Part #</span>
-                <input type="text" readonly class="form-control" id="part_number" aria-label="part_number" aria-describedby="nomen_span">
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="serial_number_span">Serial #</span>
-                <input type="text" readonly class="form-control" id="serial_number" aria-label="serial_number" aria-describedby="serial_number_span">
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="end_item_account_number_span">Eq Account #</span>
-                <input type="text" readonly class="form-control" id="end_item_account_number_id" aria-label="end_item_account_number" aria-describedby="end_item_account_number_span">
-            </div>
+    <div class="card bg-light p-3 mt-3" style="width: 30rem;">
+        <div class="card-body">
+            <h3 class="card-title">User Info: Account# {{ user.pk }}</h3>
+            <h6 class="card-subtitle mb-2 text-muted">{{ user.first_name }} {{ user.last_name }}</h6>
+            <p class="card-text">Username: {{ user.username }}<br>
+            Email: {{ user }}<br>
+            {% if user.is_admin %}
+                Role: Admin
+            {% else %}
+                Role: General User
+            {% endif %}
+            </p>
         </div>
-    </form>
+    </div>
+    <div class="card bg-light p-3 mt-3"   style="width: 30rem;">
+        <div class="card-body">
+            <h3 class="card-title">Account#: {{ eq_acct }}</h3>
+            <h6 class="card-subtitle mb-2 text-muted">Total Items: {{ total_items }}</h6>
+            <table class="table">
+                <tr class="p-3">
+                    <th>Nomenclature</th>
+                    <th>Item ID</th>
+                    <th>Serial#</th>
+                    <th>Part#</th>
+                </tr class="p-3">
+                {% for item in end_items %}
+                    <tr class="p-2">
+                        <td>{{ item.nomenclature }}</td>
+                        <td>{{ item.pk }}</td>
+                        <td>{{ item.serial_number }}</td>
+                        <td>{{ item.part_number }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
 {% endblock %}

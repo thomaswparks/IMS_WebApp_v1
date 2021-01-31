@@ -28,13 +28,6 @@ def registration_view(request):
     return render(request, 'account/register.html', context)
 
 
-# this view directs all authenticated users to the IMS home page. Non-auth'd users will be redirected to the login page.
-def home(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
-    else:
-        return render(request, 'ims/home.html')
-
 @login_required
 def profile(request):
     title = "profile"
@@ -65,3 +58,9 @@ def profile(request):
     }
 
     return render(request, 'account/profile.html', context)
+
+def home(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    else:
+        return render(request, 'ims/home.html')
