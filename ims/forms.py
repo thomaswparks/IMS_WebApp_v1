@@ -26,3 +26,7 @@ class new_item_form(ModelForm):
         model = models.EndItem
         exclude = ('end_item_account_number',)
 
+class new_sub_item_form(ModelForm):
+    class Meta:
+        model = models.SubItem
+        exclude = ('sub_item_end_item',)

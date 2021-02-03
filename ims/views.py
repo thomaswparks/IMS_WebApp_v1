@@ -2,8 +2,8 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import models, reset_queries
-from .forms import new_item_form, item_update_form
-from .models import EqAccount, EndItem
+from .forms import new_item_form, item_update_form, new_sub_item_form
+from .models import EqAccount, EndItem, SubItem
 
 
 @login_required(login_url='login')
@@ -17,28 +17,28 @@ def newItem(request):
     print('Eq Acct: ', eq_acct)
     if request.method == 'POST':
         form = new_item_form(request.POST)
-        # form.fields['end_item_account_number'].initial = eq_acct
-        context = {'form': form, 'current_user': current_user,
-                'user_id': user_id,
-                'eq_acct': eq_acct,
-                'end_items': end_items,
-                'title': title,
+        context = { 
+            'form': form, 
+            'current_user': current_user, 
+            'user_id': user_id, 
+            'eq_acct': eq_acct, 
+            'end_items': end_items, 
+            'title': title,
         }
         form.instance.end_item_account_number = EqAccount.objects.filter(eq_account_custodian_id = request.user.pk).first()
         form.save()
         messages.success(request, f'Your equipment item has been added!')
         
-    else:
-        form = new_item_form()
-        # form.fields['end_item_account_number'].initial = eq_acct
-        context = {'form': form, 'current_user': current_user,
-                'user_id': user_id,
-                'eq_acct': eq_acct,
-                'end_items': end_items,
-                'title': title,
-        }
-
-    # print('Printing POST: ', request.POST)
+    
+    form = new_item_form()
+    context = {
+        'form': form, 
+        'current_user': current_user,
+        'user_id': user_id,
+        'eq_acct': eq_acct,
+        'end_items': end_items,
+        'title': title,
+    }
     return render(request, 'ims/new_end_item.html', context)
 
 
@@ -52,6 +52,7 @@ def updateItem(request, pk):
     end_items = get_end_items(eq_acct)
     context = {}
     item = EndItem.objects.get(end_item_id=pk)
+    sub_items = item.subitem_set.all()
     u_form = item_update_form(instance=item)
     
     if request.method == 'POST':
@@ -60,6 +61,7 @@ def updateItem(request, pk):
         if u_form.is_valid:
             u_form.save()
     context = {
+            'sub_items': sub_items,
             'item': item,
             'u_form': u_form,
             'title': title,
@@ -92,6 +94,39 @@ def delete_item(request, pk):
             'end_items': end_items
         }
     return render(request, 'ims/delete.html', context)
+
+
+@login_required
+def new_sub(request, pk):
+    title = "Add Sub Item: " + str(pk)
+    current_user = request.user
+    user_id = get_user_id(request)
+    eq_acct = get_eq_acct(user_id)
+    end_items = get_end_items(eq_acct)
+    form = new_sub_item_form()
+    if request.method == 'POST':
+        if form.is_valid:
+            form = new_sub_item_form(request.POST)
+            context = { 
+                'form': form, 
+                'current_user': current_user, 
+                'user_id': user_id, 
+                'eq_acct': eq_acct, 
+                'end_items': end_items, 
+                'title': title,
+            }
+            form.instance.sub_item_end_item_id = EndItem.objects.filter(end_item_id=pk).first()
+            form.save()
+            messages.success(request, f'Your equipment item has been added!')
+    context = {
+        'form': form, 
+        'current_user': current_user,
+        'user_id': user_id,
+        'eq_acct': eq_acct,
+        'end_items': end_items,
+        'title': title,
+    }
+    return render(request, 'ims/sub-item.html', context)
 
 # this view grabs all End_Item objects from all of the current user's equipment accounts and passes it to home.html
 @login_required(login_url='login')
@@ -126,3 +161,8 @@ def get_end_items(eq_acct):
     end_items = EndItem.objects.filter(end_item_account_number=eq_acct)
 
     return end_items
+
+def get_sub_items(end_item_id):
+    sub_items = SubItem.objects.filter(sub_item_end_item_id=end_item_id)
+
+    return sub_items

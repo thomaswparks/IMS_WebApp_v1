@@ -14,6 +14,32 @@
                 <button class="btn btn-outline-info mt-2 p-50" type="submit">Update</button>
                 <a class="btn btn-outline-danger mt-2 p-50" href="{% url 'delete_item' item.end_item_id %}">Remove</a>
             </div>
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4"><h1>Sub Items</h1></legend>
+                <div class="form-group">
+                    <a class="btn btn-outline-info mt-2 p-50" href="{% url 'new_sub' item.end_item_id %}">Add New Sub</a>
+                </div>
+                <div>
+                    <table class="table">
+                        <tr>
+                            <th>Sub Item#</th>
+                            <th>Nomenclature</th>
+                            <th>Part#</th>
+                            <th>Serial#</th>
+                            <th>Quantity</th>
+                        </tr>                        
+                        {% for sub in sub_items %}
+                        <tr>
+                            <td>{{ sub.pk }}</td>
+                            <td>{{ sub.sub_nomenclature }}</td>
+                            <td>{{ sub.sub_part_number }}</td>
+                            <td>{{ sub.sub_serial_number }}</td>
+                            <td>{{ sub.quantity }}</td>
+                        </tr>
+                        {% endfor %}    
+                    </table>
+                </div>
+            </fieldset>
         </form>
     </div>
 {% endblock content %}

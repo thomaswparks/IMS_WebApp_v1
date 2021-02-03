@@ -14,12 +14,20 @@ class EqAccount(models.Model):
 
 # this class is for each end item. these are added to the equipment accounts
 class EndItem(models.Model):
+    SERVICEABLE = 'SR'
+    NEEDS_REPAIR = 'R'
+    UNREPAIRABLE = 'NR'
+    STATUS_CHOICES = [
+        (SERVICEABLE, 'Serviceable'),
+        (NEEDS_REPAIR, 'Needs Repair'),
+        (UNREPAIRABLE, 'Unrepairable'),
+    ]
     end_item_id = models.AutoField(primary_key=True)
     nomenclature = models.CharField(max_length=45)
     part_number = models.CharField(max_length=45)
     serial_number = models.CharField(max_length=45)
     end_item_account_number = models.ForeignKey(EqAccount, on_delete=models.CASCADE, null=True, blank=True)
-    status = models.IntegerField
+    status = models.CharField(max_length=45, choices=STATUS_CHOICES, default=SERVICEABLE)
 
     def __int__(self):
         return self.end_item_id
@@ -28,14 +36,13 @@ class EndItem(models.Model):
 # SubItems are equipment assets that can be listed under an end item.
 class SubItem(models.Model):
     sub_item_id = models.AutoField(primary_key=True)
-    sub_item_end_item_id = models.ForeignKey(EndItem, on_delete=models.CASCADE, null=True, blank=True)
-    sub_serial_number = models.CharField(max_length=45)
+    sub_item_end_item = models.ForeignKey(EndItem, on_delete=models.CASCADE, null=True, blank=True)
+    sub_serial_number = models.CharField(max_length=45, null=True, blank=True)
     sub_part_number = models.CharField(max_length=45)
     sub_nomenclature = models.CharField(max_length=45)
-    quantity = models.IntegerField
-    sub_status = models.IntegerField
+    quantity = models.IntegerField(null=True, blank=True)
 
-    def __str__(self):
+    def __int__(self):
         return self.sub_item_end_item_id
 
 
@@ -46,7 +53,7 @@ class Note(models.Model):
     notes_custodian_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     notes_end_item_id = models.ForeignKey(EndItem, on_delete=models.DO_NOTHING)
     notes_sub_item_id = models.ForeignKey(SubItem, on_delete=models.DO_NOTHING)
-    entry = models.TextField
+    entry = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
