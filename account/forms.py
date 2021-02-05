@@ -10,6 +10,7 @@ class RegistrationForm(UserCreationForm):
         model = Account
         fields = ("email","username","first_name","last_name","password1","password2")
 
+# this is a for to update user accounts
 class user_update_form(forms.ModelForm):
     email = forms.EmailField(max_length=60, help_text='Required. Add a valid email address')
 
@@ -17,6 +18,7 @@ class user_update_form(forms.ModelForm):
         model = Account
         fields = ['email','username']
 
+# this for is to update user profiles
 class profile_update_form(forms.ModelForm):
     class Meta:
         model = Profile

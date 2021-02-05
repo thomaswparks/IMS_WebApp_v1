@@ -102,16 +102,12 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'newItem' %}">
                                     <span data-feather="layers"></span>
-                                    Create
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <span data-feather="layers"></span>
-                                    Remove
+                                    Add New Item
                                 </a>
                             </li>
                         </ul>
+
+                        <!-- This area can be for future reports. Currently most stats are viewable on the home page -->
                         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                             <span>Reports</span>
                                 <a class="link-secondary" href="#" aria-label="Add a new report">
@@ -142,7 +138,7 @@
             {% block content %} {% endblock %}
             </div>
 
-            <!--  Right-Side column, will contain listing of assigned equipment  -->
+            <!--  Right-Side column, contains listing of assigned equipment  -->
                <style>
                     .endItems:hover .eqmt-item {
                         background-color: #aaa;
@@ -166,7 +162,7 @@
             <div class="col-md-3 col-lg-3 col-sm-4">
                 <div class="container right-side">
                     <h1 class="pt-2 mb-5">End Items</h1>
-                    <h5 class="acct_id" id="{{ eq_acct }}">Account: {{ eq_acct }}</h5>
+                    <h5 class="acct_id" id="{{ eq_acct }}" name="acct_id">Account: {{ eq_acct }}</h5>
                     {% for item in end_items %}
                         <a id="{{ item.end_item_id }}" href="{% url 'updateItem' item.end_item_id %}"><h6>Equip ID: {{ item.end_item_id }}</h6></a>
                         <p class="ps-3">Nomenclature: {{ item.nomenclature }}</p>

@@ -27,7 +27,7 @@ def registration_view(request):
         context['registration_form'] = form
     return render(request, 'account/register.html', context)
 
-
+# thiis view allows users to update their profile
 @login_required
 def profile(request):
     title = "profile"
@@ -59,6 +59,7 @@ def profile(request):
 
     return render(request, 'account/profile.html', context)
 
+# this view points unauthenticated users to the login screen, all others are redirected to the home page
 def home(request):
     if not request.user.is_authenticated:
         return redirect('login')

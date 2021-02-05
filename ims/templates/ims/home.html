@@ -2,6 +2,7 @@
 {% extends "ims/ims_base.html" %}
 {% block content %}
     <!--  Page Content Area  -->
+    <!-- User Info Card -->
     <div class="card bg-light p-3 mt-3" style="width: 30rem;">
         <div class="card-body">
             <h3 class="card-title">User Info: Account# {{ user.pk }}</h3>
@@ -16,13 +17,15 @@
             </p>
         </div>
     </div>
+
+    <!-- Account Info Card -->
     <div class="card bg-light p-3 mt-3"   style="width: 30rem;">
         <div class="card-body">
             <h3 class="card-title">Account#: {{ eq_acct }}</h3>
             <h6 class="card-subtitle mb-2 text-muted">Total Items: {{ total_items }}</h6>
             <table class="table">
                 <tr class="p-3">
-                    <th>Nomenclature</th>
+                    <th>Nomenclature</th>  <!-- This table is the list of End Items on the card -->
                     <th>Item ID</th>
                     <th>Serial#</th>
                     <th>Part#</th>

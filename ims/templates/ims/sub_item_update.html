@@ -1,0 +1,21 @@
+{% extends "ims/ims_base.html" %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <!-- This is the Sub Item Update form. Users can update or remove sub items from this page -->
+
+    <!-- Main Content Section -->
+    <div class="content-area">
+        <form method="POST">{% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4"><h1>Update Sub Item</h1></legend>
+                {{ u_form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info mt-2 p-50" type="submit" value="Select">Update</button>
+                <a class="btn btn-outline-danger mt-2 p-50" href="{% url 'delete_sub_item' item.pk %}">Remove</a>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

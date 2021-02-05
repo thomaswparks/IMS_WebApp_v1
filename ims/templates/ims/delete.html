@@ -3,6 +3,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
+<!-- This is a small line of text with a cancel and remove button to confirm deletion of an end item -->
 <p>Are you sure you want to delete this {{ item.nomenclature }}, Item ID: {{ item.pk }}</p>
 <form action="{% url 'delete_item' item.end_item_id %}" method="POST">
     {% csrf_token %}

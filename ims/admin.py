@@ -13,7 +13,7 @@ class EqAccountAdmin(admin.ModelAdmin):
     list_filter         = ()
     fieldsets           = ()
     
-
+# This class provides an admin tool for end items. Admins can add, remove or edit end items. Admins can also transfer items to other accounts
 class EndItemAdmin(admin.ModelAdmin):
     list_display = ('end_item_account_number','nomenclature','part_number','serial_number')
     list_filter = ('end_item_account_number','end_item_id','nomenclature','part_number','serial_number')

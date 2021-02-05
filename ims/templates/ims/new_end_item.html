@@ -3,6 +3,8 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
+    <!-- Add New End Item form. Users can only access this area if they have an equipment account -->
+
     <!-- Main Content Section -->
     <div class="content-area">
         <form method="POST" action="{% url 'newItem' %}">{% csrf_token %}
