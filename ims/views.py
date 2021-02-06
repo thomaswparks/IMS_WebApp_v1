@@ -107,10 +107,7 @@ def new_sub(request, pk):
     eq_acct = get_eq_acct(user_id)
     end_items = get_end_items(eq_acct)
     form = new_sub_item_form()
-    if request.method == 'POST':
-        if form.is_valid:
-            form = new_sub_item_form(request.POST)
-            context = { 
+    context = { 
                 'form': form, 
                 'current_user': current_user, 
                 'user_id': user_id, 
@@ -118,18 +115,20 @@ def new_sub(request, pk):
                 'end_items': end_items, 
                 'title': title,
             }
-            form.instance.sub_item_end_item_id = EndItem.objects.filter(end_item_id=pk).first()
-            form.save()
-            messages.success(request, f'Your equipment item has been added!')
-            form = new_sub_item_form()
-    context = {
-        'form': form, 
-        'current_user': current_user,
-        'user_id': user_id,
-        'eq_acct': eq_acct,
-        'end_items': end_items,
-        'title': title,
-    }
+    item = EndItem.objects.get(end_item_id=pk)
+    item_acct = EqAccount.objects.values_list('eq_account_number', flat=True).filter(eq_account_number=item.end_item_account_number).first()
+    if eq_acct != item_acct:
+         messages.warning(request, f'You do not have access to that item!')
+         return redirect('home')
+    else:
+        if request.method == 'POST':
+            if form.is_valid:
+                form = new_sub_item_form(request.POST)
+                form.instance.sub_item_end_item_id = EndItem.objects.filter(end_item_id=pk).first()
+                form.save()
+                messages.success(request, f'Your equipment item has been added!')
+                form = new_sub_item_form()
+    print('Eq Acct = ' + str(eq_acct) + '; New Item Acct = ' + str(item_acct))
     return render(request, 'ims/sub-item.html', context)
 
 # this view grabs all End_Item objects from all of the current user's equipment accounts and passes it to home.html
